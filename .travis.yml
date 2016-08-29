@@ -1,0 +1,24 @@
+language: cpp
+compiler: g++
+
+sudo: required
+
+before_install:
+    - pip install --user cpp-coveralls
+    - sudo apt-get update -qq
+    - sudo apt-get install libx11-dev libxcb1-dev libx11-xcb-dev libxcb-randr0-dev libxcb-image0-dev libgl1-mesa-dev libudev-dev libfreetype6-dev libjpeg-dev libopenal-dev libflac-dev libvorbis-dev -y
+
+install:
+    - wget http://www.sfml-dev.org/files/SFML-2.4.0-linux-gcc-64-bit.tar.gz
+    - tar -xvzf SFML-2.4.0-linux-gcc-64-bit.tar.gz
+    - export LD_LIBRARY_PATH=SFML-2.4.0/lib
+    - mkdir build
+    - cd build
+
+script: cmake ..
+
+after_success:
+    - coveralls --exclude lib --exclude tests --gcov-options '\-lp'
+
+notifications :
+    email : flaesch.arnaud@esgi.fr
